@@ -81,6 +81,27 @@ shapiro_wilk_after <- shapiro.test(los_after)
 
 ############################################################################# VRAAG 2 ###############################################################################
 
+#levend en geen aanwezigheid van de golven
+alive_0 <- nrow(subset(gegevens, dstat == "0" & mitype == "0"))
+#levend en wel aanwezigheid van golven
+alive_1 <- nrow(subset(gegevens, dstat == "0" & mitype == "1"))
+# dood en geen aanwezigheid  van van golven
+dead_0 <- nrow(subset(gegevens, dstat == "1" & mitype == "0"))
+# dood en  wel aanwezigheid van golven
+dead_1 <- nrow(subset(gegevens, dstat == "1" & mitype == "1"))
+
+#2 types vectoren per kolom
+alive <- c(alive_0, alive_1)
+dead <- c(dead_0, dead_1)
+
+ctable <- data.frame(alive, dead)
+rownames(ctable) <- c("Geen aanwezigheid van golven", "Wel aanwezigheid van golven")
+#ctable
+ChiSq <- chisq.test(ctable)
+ChiSq$observed
+ChiSq$expected
+
+# X-squared = 0.0075814, df = 1, p-value = 0.9306
 
 
-
+############################################################################# VRAAG 3 ###############################################################################
