@@ -41,7 +41,7 @@ qqnorm(los,main = "QQ-plot voor Los", ylab = "Los (Data quantiles) (ziekenhuisve
 qqline(los,col="red")
 # Shapiro-Wilk test voor we proberen normale verdeling te benaderen
 shapiro_wilk_before <- shapiro.test(los)
-#shapiro_wilk_before
+shapiro_wilk_before
 
 
 # TIME TO BENADER NORMALE VERDELING
@@ -74,7 +74,7 @@ qqnorm(los_after,main = "QQ-plot voor Log(Los)", ylab = "Log(Los) (Data quantile
 qqline(los_after,col="green")
 # Shapiro-Wilk test erna
 shapiro_wilk_after <- shapiro.test(los_after)
-#shapiro_wilk_after
+shapiro_wilk_after
 
 ############################################################################# VRAAG 2 ###############################################################################
 
@@ -95,6 +95,7 @@ ctable <- data.frame(alive, dead)
 rownames(ctable) <- c("Geen aanwezigheid van golven", "Wel aanwezigheid van golven")
 #ctable
 ChiSq <- chisq.test(ctable)
+ChiSq
 ChiSq$observed
 ChiSq$expected
 
@@ -105,7 +106,7 @@ abline(lm(bmi ~ age, data = gegevens), col = "red")
 
 #pearson's corr test
 tested <- cor.test(gegevens$age,gegevens$bmi,method = "pearson")
-#tested
+tested
 
 # get the bestfit line by least squares method => In R was da fitting lineair models functie lm()
 model <- lm(bmi ~ age, data = gegevens)
