@@ -1,5 +1,5 @@
 # Load the file in
-gegevens <- read.csv(file = file.choose(),header = TRUE, dec = ".",sep = ";")
+gegevens <- read.csv(file = file.choose(),header = TRUE, dec = ",",sep = ";")
 # 500 rijen
 #cat("Number of rows before:", nrow(gegevens), "\n")
 
@@ -12,11 +12,10 @@ j <- 0
 k <- 0
 
 # verwijder die rijen zoals gezegd op het opgave
-gegevens <- gegevens[-c(k+1, j+1, i+1),]
-gegevens <- gegevens[-c(j*k+1, i*j+1, i*k+1),]
-gegevens <- gegevens[-c(i*j*k+1, i+j+k+1),]
-# 495 rijen over
-#cat("Number of rows after:", nrow(gegevens), "\n")
+rows_to_remove <- c(k+1, j+1, i+1, j*k+1, i*j+1, i*k+1, i*j*k+1, i+j+k+1)
+gegevens <- gegevens[-rows_to_remove, ]
+
+cat("Number of rows after:", nrow(gegevens), "\n")
 
 # haal los eruit
 los <- gegevens$los
@@ -42,7 +41,6 @@ qqnorm(los,main = "QQ-plot voor Los", ylab = "Los (Data quantiles) (ziekenhuisve
 qqline(los,col="red")
 # Shapiro-Wilk test voor we proberen normale verdeling te benaderen
 shapiro_wilk_before <- shapiro.test(los)
-# W = 0.76839, p-value < 2.2e-16 (before adjustments)
 #shapiro_wilk_before
 
 
@@ -74,9 +72,8 @@ hist(los_after,ylab = "#patients",xlab = "Duur ziekenhuisbezoek (in days)",main 
 # setup qqplot
 qqnorm(los_after,main = "QQ-plot voor Log(Los)", ylab = "Log(Los) (Data quantiles) (ziekenhuisverblijf (in days)) ",xlab = "(Theoretical quantiles)")
 qqline(los_after,col="green")
-# Shapiro-Wilk test voor we proberen normale verdeling te benaderen
+# Shapiro-Wilk test erna
 shapiro_wilk_after <- shapiro.test(los_after)
-# W = W = 0.97411, p-value = 1.207e-07
 #shapiro_wilk_after
 
 ############################################################################# VRAAG 2 ###############################################################################
@@ -101,7 +98,17 @@ ChiSq <- chisq.test(ctable)
 ChiSq$observed
 ChiSq$expected
 
-# X-squared = 0.0075814, df = 1, p-value = 0.9306
-
-
 ############################################################################# VRAAG 3 ###############################################################################
+# eerst ff kijken of er een lineair verband bestaat ofniet adhv scatterplot grafisch
+plot(gegevens$age, gegevens$bmi, main = "Scatterplot of Age && Bmi", xlab = "Age", ylab = "Bmi", col = "blue")
+abline(lm(bmi ~ age, data = gegevens), col = "red")
+
+#pearson's corr test
+tested <- cor.test(gegevens$age,gegevens$bmi,method = "pearson")
+#tested
+
+# get the bestfit line by least squares method => In R was da fitting lineair models functie lm()
+model <- lm(bmi ~ age, data = gegevens)
+# alle gegevens van dit lineaire regression model
+model_summary <- summary(model)
+print(model_summary)
